@@ -1,4 +1,4 @@
-var CACHE = 'michedule-v2';
+var CACHE = 'michedule-v3';
 var FILES = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', function(e) {
@@ -17,7 +17,14 @@ self.addEventListener('activate', function(e) {
 
 self.addEventListener('fetch', function(e) {
   var url = e.request.url;
-  if (url.indexOf('fonts.googleapis.com') !== -1 || url.indexOf('fonts.gstatic.com') !== -1) {
+
+  if (url.indexOf('supabase') !== -1) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
+
+  if (url.indexOf('fonts.googleapis.com') !== -1 || url.indexOf('fonts.gstatic.com') !== -1
+      || url.indexOf('cdn.jsdelivr.net') !== -1) {
     e.respondWith(
       caches.match(e.request).then(function(r) {
         return r || fetch(e.request).then(function(resp) {
